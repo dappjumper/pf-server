@@ -62,7 +62,7 @@ handler.endpoints = [
                     })
                 })
                 .catch((error)=>{
-                    handler.failure(req, res, 'Fatal error')
+                    res.send(error)
                 })
         }
     }
@@ -72,7 +72,6 @@ handler.start = function(app) {
     for(let i in handler.endpoints) {
         let endpoint = handler.endpoints[i]
         app[endpoint.type](handler.baseUrl+endpoint.url, function(req, res) {
-            return res.send({status:'test', apikey: req.header('X-API-KEY')})
             if(!req.header('X-API-KEY')) return res.send({status:403,error:'Please specify API key in X-API-KEY'})
             endpoint.handler(req.header('X-API-KEY'), req, res)
         }.bind({endpoint:endpoint}))
