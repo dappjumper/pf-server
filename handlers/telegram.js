@@ -62,7 +62,7 @@ handler.endpoints = [
                     })
                 })
                 .catch((error)=>{
-                    res.send(error)
+                    res.send(JSON.stringify(error))
                 })
         }
     }
