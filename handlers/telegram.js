@@ -63,7 +63,7 @@ handler.endpoints = [
                     })
                 })
                 .catch((error)=>{
-                    res.send(JSON.stringify(error))
+                    res.send("This shouldn't happenn...")
                 })
         }
     }
