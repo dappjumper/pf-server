@@ -23,11 +23,11 @@ handler.request = function(apikey, method, payload) {
                 if(response.data.ok) {
                     resolve(response.data.result)
                 } else {
-                    reject("Request did not return OK")
+                    return res.send({status:500, error:"Telegram did not validate your request"})
                 }
             })
             .catch((error) => {
-                reject("Telegram server rejected the request")
+                return res.send({status:500, error:"Telegram server rejected the request"})
             })
     })
 }
