@@ -54,8 +54,7 @@ handler.endpoints = [
                         if(!err) {
                             res.send({
                                 status: 200,
-                                bot: result,
-                                db: resul
+                                bot: result
                             })
                         } else {
                             handler.failure(req, res, 'Failed to connect to internal database')
@@ -63,7 +62,7 @@ handler.endpoints = [
                     })
                 })
                 .catch((error)=>{
-                    handler.failure(req, res, error)
+                    handler.failure(req, res, 'Fatal error')
                 })
         }
     }
