@@ -41,9 +41,11 @@ handler.endpoints = [
         handler: function(apikey, req, res) {
             handler.request(apikey, 'getMe')
                 .then((result)=>{
-                    res.send({
-                        asd: 5,
-                        asdqwe: result
+                    database.collection("bots").insert( {
+                        botid: result.id,
+                        apikey: apikey
+                    }, function(err, resul) {
+                        res.send('Did some operation')
                     })
                 })
                 .catch((error)=>{
