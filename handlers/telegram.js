@@ -55,6 +55,7 @@ handler.endpoints = [
                             res.send({
                                 status: 200,
                                 bot: result,
+                                db: resul
                             })
                         } else {
                             handler.failure(req, res, 'Failed to connect to internal database')
