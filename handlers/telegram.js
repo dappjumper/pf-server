@@ -1,12 +1,13 @@
 const axios = require('axios')
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb+srv://tdd-userflow:x4AhR7r7dbK23Kzh@cloud-storage-mongo-atlas-p431u.gcp.mongodb.net/chat?authSource=admin&replicaSet=cloud-storage-mongo-atlas-shard-0&readPreference=primary&ssl=true";
+var database = null
 
 MongoClient.connect(url, {
     useUnifiedTopology: true
 }, function(err, db) {
   if (err) throw err;
-
+  database = db
 });
 
 const handler = {
@@ -40,7 +41,7 @@ handler.endpoints = [
         handler: function(apikey, req, res) {
             handler.request(apikey, 'getMe')
                 .then((result)=>{
-                    database.collection("bots_telegram").update( {
+                    database.collection("bots").update( {
                         botid: result.id,
                         apikey: apikey
                     }, {
