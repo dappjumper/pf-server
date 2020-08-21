@@ -1,4 +1,13 @@
 const axios = require('axios')
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb+srv://tdd-userflow:x4AhR7r7dbK23Kzh@cloud-storage-mongo-atlas-p431u.gcp.mongodb.net/chat?authSource=admin&replicaSet=cloud-storage-mongo-atlas-shard-0&readPreference=primary&ssl=true";
+
+MongoClient.connect(url, {
+    useUnifiedTopology: true
+}, function(err, db) {
+  if (err) throw err;
+
+});
 
 const handler = {
     baseUrl: '/telegram/',
@@ -31,9 +40,24 @@ handler.endpoints = [
         handler: function(apikey, req, res) {
             handler.request(apikey, 'getMe')
                 .then((result)=>{
-                    res.send({
-                        status: 200,
-                        bot: result,
+                    database.collection("bots_telegram").update( {
+                        botid: result.id,
+                        apikey: apikey
+                    }, {
+                        $set: {
+                            botid: result.id,
+                            apikey: apikey,
+                            'cached.getMe': result
+                        }
+                    }, function(err, resul) {
+                        if(!err) {
+                            res.send({
+                                status: 200,
+                                bot: result,
+                            })
+                        } else {
+                            handler.failure(req, res, 'Failed to connect to internal database')
+                        }
                     })
                 })
                 .catch((error)=>{
@@ -51,6 +75,9 @@ handler.start = function(app) {
             endpoint.handler(req.header('X-API-KEY'), req, res)
         }.bind({endpoint:endpoint}))
     }
+    app.post('/telegram/webhook/:uid/:botid', (req, res)=>{
+        if(!req.params.uid || !req.params.botid) return res.send('200')
+    })
 }
 
 module.exports = handler.start
