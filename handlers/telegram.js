@@ -41,25 +41,9 @@ handler.endpoints = [
         handler: function(apikey, req, res) {
             handler.request(apikey, 'getMe')
                 .then((result)=>{
-                    database.collection("bots").update( {
-                        botid: result.id,
-                        apikey: apikey
-                    }, {
-                        $set: {
-                            botid: result.id,
-                            apikey: apikey,
-                            'cached.getMe': result
-                        }
-                    }, function(err, resul) {
-                        if(!err) {
-                            res.send({
-                                status: 200,
-                                bot: result
-                            })
-                        } else {
-                            return res.send('Failed to connect to internal database')
-                            handler.failure(req, res, 'Failed to connect to internal database')
-                        }
+                    res.send({
+                        asd: 5,
+                        asdqwe: result
                     })
                 })
                 .catch((error)=>{
